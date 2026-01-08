@@ -2,33 +2,64 @@ import tkinter as tk
 from tkinter import *
 from PIL import Image, ImageTk
 
-# ОСНОВА
-root = tk.Tk()
+class Main(tk.Tk):
+    def __init__(self): 
+        super().__init__()
 
-root.title("DeerView")
-root.geometry("1440x860")
-root.configure(bg='#2B4F26')
+        mainframe = tk.Frame(self)
+        mainframe.pack(fill='both', expand=True)
 
-# ЛОГО
-image = Image.open("deer_logo.png") 
-resized_image = image.resize((450, 400))
-img = ImageTk.PhotoImage(resized_image)
+        self.page1 = Page1(mainframe, self)
+        self.page1.pack(fill='both', expand=True)
 
-logo = Label(image=img, borderwidth=0, highlightthickness=0)
-logo.image = img
-logo.pack()
+        self.page2 = Page2(mainframe, self)
+        self.page2.pack(fill='both', expand=True)
 
-# ТЕКСТ
-text1 = tk.Label(root, text="DeerView", font=("Courier New", 26, "bold"), bg='#2B4F26', fg='white')
-text1.pack()
+        self.page1.tkraise()
 
-# КНОПКА СТАРТ
-button = tk.Button(root, text="НАЧАТЬ", command=None, width=15, height=1, font=("Courier New", 26, "bold"))
-button.pack(pady=100)
 
-# ТЕКСТ ВЕРСИЯ
-text2 = tk.Label(root, text="version alpha 1.0", font=("Courier New", 10), bg='#2B4F26', fg='white')
-text2.pack(side=tk.BOTTOM)
+class Page1(tk.Frame):
+    def __init__(self, parent, controller): 
+        super().__init__(parent)
+        self.controller = controller
 
-# ЗАПУСК
-root.mainloop()
+        self.GUI()
+        
+    def GUI(self):
+        self.controller.title("DeerView")
+        self.controller.geometry("1440x860")
+        self.controller.configure(bg='#2B4F26')
+
+        image = Image.open("deer_logo.png") 
+        resized_image = image.resize((450, 400))
+        img = ImageTk.PhotoImage(resized_image)
+
+        logo = tk.Label(self, image=img, borderwidth=0, highlightthickness=0)
+        logo.image = img
+        logo.pack()
+        
+        text1 = tk.Label(self, text="DeerView", font=("Courier New", 26, "bold"), bg='#2B4F26', fg='white')
+        text1.pack()
+
+        button = tk.Button(self, text="НАЧАТЬ", command=self.show_page2, width=15, height=1, font=("Courier New", 26, "bold"))
+        button.pack(pady=100)
+
+        text2 = tk.Label(self, text="version alpha 1.0", font=("Courier New", 10), bg='#2B4F26', fg='white')
+        text2.pack(side=tk.BOTTOM)
+
+    def show_page2(self):
+        self.controller.page2.tkraise()
+
+
+class Page2(tk.Frame):
+    def __init__(self, parent, controller): 
+        super().__init__(parent)
+        self.GUI()
+
+    def GUI(self):
+        text1 = tk.Label(self, text="SECOND PAGE", font=("Courier New", 26, "bold"), bg='#2B4F26', fg='white')
+        text1.pack()
+
+
+app = Main()
+app.mainloop()
